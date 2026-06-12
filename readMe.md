@@ -105,7 +105,7 @@ Auth Required: Yes (Sanctum)
 
 URL Parameters: id (The database ID of the message to delete).
 
-Success Response (200 OK): {"status": true, "message": "تم حذف رسالة العميل بنجاح 🗑️"}
+Success Response (200 OK): {"status": true, "message": "deleted successfully"}
 
 5. Admin User Management (Admin Panel)
 🔹 List All Registered Admins
@@ -134,7 +134,7 @@ JSON
     "email": "assistant@example.com",
     "password": "password123"
 }
-Success Response (201 Created): {"status": true, "message": "تم إضافة الأدمن الجديد بنجاح! 👤", "data": {...}}
+Success Response (201 Created): {"status": true, "message": "added successfully", "data": {...}}
 
 🔹 Delete an Admin Account
 Method: DELETE
@@ -147,7 +147,7 @@ URL Parameters: id (The database ID of the admin to delete).
 
 Security Check: Prevents the currently logged-in admin from self-deletion.
 
-Success Response (200 OK): {"status": true, "message": "تم حذف الأدمن بنجاح وطرده من اللوحة 🗑️"}
+Success Response (200 OK): {"status": true, "message": "deleted successfully"}
 
 6. Portfolio Management Modules (Admin Panel)
 🔹 Create a New Portfolio Item
