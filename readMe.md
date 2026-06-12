@@ -1,184 +1,466 @@
 # Elmotaheda Company API Documentation
 
-A secure, high-performance RESTful API built with Laravel to power the web platform and administrative dashboard of **Elmotaheda Sabagh**. This document serves as the absolute reference for all available API endpoints, request payloads, and authentication rules.
+A secure, high-performance RESTful API built with Laravel to power the web platform and administrative dashboard of **Elmotaheda Sabagh**.
+
+This document serves as the official reference for all available API endpoints, authentication rules, request payloads, and response structures.
 
 ---
 
-## 🔒 Authentication & Headers
+## 🌐 Base URL
 
-All protected endpoints require token-based authentication via **Laravel Sanctum**.
+### Production
+```text
+https://elmotahedasabagh.com/api
+```
 
-### Required Headers for All Requests:
-- `Accept`: `application/json`
-- `Content-Type`: `application/json`
-- `Authorization`: `Bearer {your_secret_sanctum_token}` *(Required only for Protected Endpoints)*
+### Local Development
+```text
+http://localhost:8000/api
+```
 
 ---
 
-## 🔌 API Endpoints Reference
+# 🔒 Authentication & Headers
 
-### 1. Authentication Modules
-#### 🔹 Register a New Admin Account (Initial Setup / Public Access)
-- **Method:** `POST`
-- **Endpoint:** `/api/register`
-- **Auth Required:** No
-- **Request Body (JSON):**
-  ```json
-  {
-      "name": "Admin Name",
-      "email": "admin@example.com",
-      "password": "securepassword123",
-      "password_confirmation": "securepassword123"
-  }
-  
+All protected endpoints require **Laravel Sanctum Authentication**.
 
-### 2. Public Website Modules (Visitor Facing)
+## Required Headers
 
-#### 🔹 Submit Contact Form / Message
-- **Method:** `POST`
-- **Endpoint:** `/api/contact-us`
-- **Auth Required:** No
-- **Request Body (JSON):**
-  ```json
-  {
-      "name": "John Doe",
-      "phone": "+201012345678",
-      "area": "Fifth Settlement",
-      "service_type": "Interior Painting",
-      "message": "I want to estimate the cost for a 150m apartment."
-  }
-  
-Success Response (201 Created): Returns status: true, a success message, and the saved message object.
+| Header | Value |
+|---------|---------|
+| Accept | application/json |
+| Content-Type | application/json |
+| Authorization | Bearer {your_sanctum_token} |
 
+---
 
+# 📌 API Endpoints
 
-🔹 Track Unique Visitor Traffic
-Method: POST
+## 1. Authentication
 
-Endpoint: /api/track-visit
+### Register a New Admin Account
 
-Auth Required: No
+**Endpoint**
 
-Description: Invoked automatically by the frontend application upon home page load. Automatically filters and stores unique client IP addresses per day.
+```http
+POST /api/register
+```
 
-Request Body: None (Laravel automatically captures the request IP).
+**Authentication Required**
 
-Success Response (200 OK): {"status": true, "message": "Visit tracked successfully"}
+```text
+No
+```
 
-### 3. Administrative Dashboard Modules
+**Request Body**
 
-#### 🔹 Fetch Dashboard Aggregated Statistics
-- **Method:** `GET`
-- **Endpoint:** `/api/dashboard/stats`
-- **Auth Required:** Yes (Sanctum)
-- **Description:** Fetches summary metrics to render analytical counters on the dashboard view.
-- **Success Response (200 OK):**
-  ```json
-  {
-      "status": true,
-      "data": {
-          "total_visitors": 1420,
-          "total_messages": 35,
-          "total_portfolios": 18
-      }
-  }
-  
+```json
+{
+    "name": "Admin Name",
+    "email": "admin@example.com",
+    "password": "securepassword123",
+    "password_confirmation": "securepassword123"
+}
+```
 
-4. Contact Messages Management (Admin Panel)
-🔹 List All Contact Messages
-Method: GET
+**Success Response**
 
-Endpoint: /api/contact-messages
+```json
+{
+    "status": true,
+    "message": "registered successfully",
+    "data": {
+        "id": 1,
+        "name": "Admin Name",
+        "email": "admin@example.com"
+    }
+}
+```
 
-Auth Required: Yes (Sanctum)
+---
 
-Description: Fetches all inquiries sent by clients, sorted from newest to oldest.
+# 2. Public Website Modules
 
-Success Response (200 OK): Returns status: true, total count of messages, and an array containing all message objects.
+## Submit Contact Form
 
-🔹 Delete a Contact Message
-Method: DELETE
+**Endpoint**
 
-Endpoint: /api/contact-messages/{id}
+```http
+POST /api/contact-us
+```
 
-Auth Required: Yes (Sanctum)
+**Authentication Required**
 
-URL Parameters: id (The database ID of the message to delete).
+```text
+No
+```
 
-Success Response (200 OK): {"status": true, "message": "deleted successfully"}
+**Request Body**
 
-5. Admin User Management (Admin Panel)
-🔹 List All Registered Admins
-Method: GET
+```json
+{
+    "name": "John Doe",
+    "phone": "+201012345678",
+    "area": "Fifth Settlement",
+    "service_type": "Interior Painting",
+    "message": "I want to estimate the cost for a 150m apartment."
+}
+```
 
-Endpoint: /api/admins
+**Success Response**
 
-Auth Required: Yes (Sanctum)
+```json
+{
+    "status": true,
+    "message": "Message submitted successfully",
+    "data": {}
+}
+```
 
-Success Response (200 OK): Returns an array of all backend managers who have access to the panel.
+---
 
-🔹 Add a New Admin Account
-Method: POST
+## Track Visitor
 
-Endpoint: /api/admins
+**Endpoint**
 
-Auth Required: Yes (Sanctum)
+```http
+POST /api/track-visit
+```
 
-Request Body (JSON):
+**Authentication Required**
 
-JSON
+```text
+No
+```
 
+**Request Body**
 
+```text
+None
+```
+
+**Success Response**
+
+```json
+{
+    "status": true,
+    "message": "Visit tracked successfully"
+}
+```
+
+---
+
+# 3. Dashboard Statistics
+
+## Fetch Dashboard Statistics
+
+**Endpoint**
+
+```http
+GET /api/dashboard/stats
+```
+
+**Authentication Required**
+
+```text
+Yes (Sanctum)
+```
+
+**Success Response**
+
+```json
+{
+    "status": true,
+    "data": {
+        "total_visitors": 1420,
+        "total_messages": 35,
+        "total_portfolios": 18
+    }
+}
+```
+
+---
+
+# 4. Contact Messages Management
+
+## List Contact Messages
+
+**Endpoint**
+
+```http
+GET /api/contact-messages
+```
+
+**Authentication Required**
+
+```text
+Yes (Sanctum)
+```
+
+**Success Response**
+
+```json
+{
+    "status": true,
+    "count": 35,
+    "data": []
+}
+```
+
+---
+
+## Delete Contact Message
+
+**Endpoint**
+
+```http
+DELETE /api/contact-messages/{id}
+```
+
+**Authentication Required**
+
+```text
+Yes (Sanctum)
+```
+
+**Path Parameters**
+
+| Parameter | Description |
+|------------|------------|
+| id | Message ID |
+
+**Success Response**
+
+```json
+{
+    "status": true,
+    "message": "deleted successfully"
+}
+```
+
+---
+
+# 5. Admin Management
+
+## List Admins
+
+**Endpoint**
+
+```http
+GET /api/admins
+```
+
+**Authentication Required**
+
+```text
+Yes (Sanctum)
+```
+
+**Success Response**
+
+```json
+{
+    "status": true,
+    "data": []
+}
+```
+
+---
+
+## Create Admin
+
+**Endpoint**
+
+```http
+POST /api/admins
+```
+
+**Authentication Required**
+
+```text
+Yes (Sanctum)
+```
+
+**Request Body**
+
+```json
 {
     "name": "Assistant Admin",
     "email": "assistant@example.com",
     "password": "password123"
 }
-Success Response (201 Created): {"status": true, "message": "added successfully", "data": {...}}
+```
 
-🔹 Delete an Admin Account
-Method: DELETE
+**Success Response**
 
-Endpoint: /api/admins/{id}
+```json
+{
+    "status": true,
+    "message": "added successfully",
+    "data": {}
+}
+```
 
-Auth Required: Yes (Sanctum)
+---
 
-URL Parameters: id (The database ID of the admin to delete).
+## Delete Admin
 
-Security Check: Prevents the currently logged-in admin from self-deletion.
+**Endpoint**
 
-Success Response (200 OK): {"status": true, "message": "deleted successfully"}
+```http
+DELETE /api/admins/{id}
+```
 
-6. Portfolio Management Modules (Admin Panel)
-🔹 Create a New Portfolio Item
-Method: POST
+**Authentication Required**
 
-Endpoint: /api/portfolios
+```text
+Yes (Sanctum)
+```
 
-Auth Required: Yes (Sanctum)
+**Security Note**
 
-Request Body (Multipart Form-Data / JSON): Fields containing portfolio project specific details (Title, Description, Images, etc.).
+```text
+Self-deletion is not allowed.
+```
 
-Success Response (201 Created): Returns the newly created portfolio item configuration.
+**Success Response**
 
-🔹 Update an Existing Portfolio Item
-Method: PUT / POST (with _method=PUT Form-Data if handling file uploads)
+```json
+{
+    "status": true,
+    "message": "deleted successfully"
+}
+```
 
-Endpoint: /api/portfolios/{id}
+---
 
-Auth Required: Yes (Sanctum)
+# 6. Portfolio Management
 
-URL Parameters: id (The database ID of the portfolio item to modify).
+## Create Portfolio Item
 
-Success Response (200 OK): Returns updated model object details.
+**Endpoint**
 
-🔹 Delete a Portfolio Item
-Method: DELETE
+```http
+POST /api/portfolios
+```
 
-Endpoint: /api/portfolios/{id}
+**Authentication Required**
 
-Auth Required: Yes (Sanctum)
+```text
+Yes (Sanctum)
+```
 
-URL Parameters: id (The database ID of the portfolio item to drop).
+**Request Type**
 
-Success Response (200 OK): Confirms the deletion of the specified portfolio object.
+```text
+multipart/form-data
+```
+
+**Success Response**
+
+```json
+{
+    "status": true,
+    "message": "created successfully",
+    "data": {}
+}
+```
+
+---
+
+## Update Portfolio Item
+
+**Endpoint**
+
+```http
+PUT /api/portfolios/{id}
+```
+
+or
+
+```http
+POST /api/portfolios/{id}
+```
+
+with:
+
+```text
+_method=PUT
+```
+
+**Authentication Required**
+
+```text
+Yes (Sanctum)
+```
+
+**Success Response**
+
+```json
+{
+    "status": true,
+    "message": "updated successfully",
+    "data": {}
+}
+```
+
+---
+
+## Delete Portfolio Item
+
+**Endpoint**
+
+```http
+DELETE /api/portfolios/{id}
+```
+
+**Authentication Required**
+
+```text
+Yes (Sanctum)
+```
+
+**Success Response**
+
+```json
+{
+    "status": true,
+    "message": "deleted successfully"
+}
+```
+
+---
+
+# 📊 HTTP Status Codes
+
+| Code | Meaning |
+|--------|--------|
+| 200 | Request completed successfully |
+| 201 | Resource created successfully |
+| 401 | Unauthorized |
+| 403 | Forbidden |
+| 404 | Resource not found |
+| 422 | Validation error |
+| 500 | Internal server error |
+
+---
+
+# 🚀 Example Authenticated Request
+
+```bash
+curl --request GET \
+  --url https://elmotahedasabagh.com/api/dashboard/stats \
+  --header "Accept: application/json" \
+  --header "Authorization: Bearer YOUR_TOKEN_HERE"
+```
+
+---
+
+# 📝 Notes
+
+- All protected endpoints require a valid Sanctum token.
+- Portfolio image uploads should use `multipart/form-data`.
+- Visitor tracking stores unique IP addresses per day.
+- All responses are returned in JSON format.
+
+---
